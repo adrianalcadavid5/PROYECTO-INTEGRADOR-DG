@@ -3,6 +3,8 @@ import com.dh.clinica.dao.IDao;
 import com.dh.clinica.model.Paciente;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PacienteService {
     //tienen una implementacion de pacienteIDao y esto obliga a un constructor
@@ -19,4 +21,14 @@ public class PacienteService {
     public Paciente buscarPorId(Integer id){
         return pacienteIDao.buscarPorId(id); // despues vamos al test
     }
+    public List<Paciente>buscarTodos(){
+        return pacienteIDao.buscarTodos();
+    }
+    public void modificarPaciente(Paciente paciente){
+        pacienteIDao.modificar(paciente);
+    }
+    public void eliminarPaciente(Integer id){
+        pacienteIDao.eliminar(id);
+    }
+
 }
