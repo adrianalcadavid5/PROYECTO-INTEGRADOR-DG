@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -19,6 +20,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
     public static final String INSERT = "INSERT INTO PACIENTES VALUES (DEFAULT,?,?,?,?,?)";
 
     public static final String SELECT_ID = "SELECT * FROM PACIENTES WHERE ID = ?";
+    public static final String SELECT_ALL ="SELECT * FROM PACIENTES";
     public static final String UPDATE = "UPDATE PACIENTES SET APELLIDO=?, NOMBRE=?," +
             "DNI=?, FECHA_INGRESO=?, ID_DOMICILIO=? WHERE ID=?";
     public static final String DELETE = "DELETE FROM PACIENTES WHERE ID =? ";
@@ -128,8 +130,41 @@ public class PacienteDaoH2 implements IDao<Paciente> {
 
     @Override
     public List<Paciente> buscarTodos() {
-        return List.of();
+        Connection connection = null;
+        List<Paciente> pacientes = new ArrayList<>();
+        Paciente pacienteDesdeDB = null;
+        try{
+            connection = H2Connection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL);
+            while (resultSet.next()){
+                Integer idDB = resultSet.getInt(1);
+                String apellido = resultSet.getString(2);
+                String nombre = resultSet.getString(3);
+                String dni = resultSet.getString(4);
+                LocalDate fechaIngreso = resultSet.getDate(5).toLocalDate();
+                Integer id_domicilio = resultSet.getInt(6);
+                Domicilio domicilio = domicilioDaoH2.buscarPorId(id_domicilio);
+                pacienteDesdeDB = new Paciente(idDB, apellido, nombre, dni, fechaIngreso, domicilio);
+                logger.info("paciente" + pacienteDesdeDB);
+                pacientes.add(pacienteDesdeDB);
+            }
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                logger.error(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return pacientes;
+
     }
+
 
     @Override
     public void modificar(Paciente paciente) {

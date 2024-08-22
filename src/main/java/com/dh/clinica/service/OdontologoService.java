@@ -28,6 +28,7 @@ public class OdontologoService {
     public List<Odontologo> buscarTodos(){
         return odontologoIDao.buscarTodos();
     }
+
     public void modificarOdontologo(Odontologo odontologo){
         odontologoIDao.modificar(odontologo);
     }

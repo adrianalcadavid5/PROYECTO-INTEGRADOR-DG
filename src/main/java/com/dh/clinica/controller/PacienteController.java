@@ -11,14 +11,19 @@ import java.util.List;
 public class PacienteController {
     private PacienteService pacienteService;
 
+    //para hacer una inyeccion de dependencia, lo hacemos por medio del constructor, podemos acceder a los metodos del servicio
     public PacienteController(PacienteService pacienteService) {
         this.pacienteService = pacienteService;
     }
 
 
-    //Ingresa un JSON y devolverá un objeto paciente que pasa por la libreria Jackson y vuelve a JSON, esto se llama serializacion
+    /*aca ocurre una serializacion y deserializacion de datos
+    ingresa -> JSON -> jackson -> objeto Paciente (deserealizacion)
+    salga -> Objeto Paciente -> jackson -> JSON (serializacion) (esto ya lo hace spring boot
+    NOTA: Las clases del moldelo deben de tener un consturctor vacio*/
+    //creamos un endpoint
     @PostMapping("/guardar")
-    public Paciente guardarPaciente(@RequestBody Paciente paciente){
+        public Paciente guardarPaciente(@RequestBody Paciente paciente){
         return pacienteService.guardarPaciente(paciente);
     }
     @GetMapping("/buscar/{id}")

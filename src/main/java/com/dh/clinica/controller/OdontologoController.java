@@ -10,8 +10,7 @@ import java.util.List;
 @RequestMapping("/odontologo")
 public class OdontologoController {
 
-      private OdontologoService odontologoService;
-
+    private OdontologoService odontologoService;
     public OdontologoController(OdontologoService odontologoService) {
         this.odontologoService = odontologoService;
     }

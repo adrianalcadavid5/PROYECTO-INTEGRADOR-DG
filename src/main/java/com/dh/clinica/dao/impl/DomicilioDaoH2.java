@@ -116,7 +116,7 @@ public class DomicilioDaoH2 implements IDao<Domicilio> {
 
     @Override
     public List<Domicilio> buscarTodos() {
-        return List.of();
+        return null;
     }
 
     @Override
