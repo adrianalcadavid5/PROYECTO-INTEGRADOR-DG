@@ -1,0 +1,12 @@
+2024-08-24 18:08:29.632788-05:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, [*]WHERE ID=?"; se esperaba "identifier"
+Syntax error in SQL statement "UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, [*]WHERE ID=?"; expected "identifier"; SQL statement:
+UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, WHERE ID=? [42001-224]
+2024-08-24 18:41:47.449544-05:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, [*]WHERE ID=?"; se esperaba "identifier"
+Syntax error in SQL statement "UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, [*]WHERE ID=?"; expected "identifier"; SQL statement:
+UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, WHERE ID=? [42001-224]
+2024-08-24 18:44:43.394517-05:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, [*]WHERE ID=?"; se esperaba "identifier"
+Syntax error in SQL statement "UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, [*]WHERE ID=?"; expected "identifier"; SQL statement:
+UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, WHERE ID=? [42001-224]

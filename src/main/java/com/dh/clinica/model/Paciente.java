@@ -10,9 +10,11 @@ public class Paciente {
     private LocalDate fechaIngreso;
     private Domicilio domicilio;
 
+    // se necesitan agregar a cada entidad 3 constructores. 1 vacio. 2. sin el id, y el 3 completo
+    //1.para poder serializar y deserializar datos con jackson, debemos de tener un constructor vacio.
     public Paciente() {
     };
-
+//2.agragamos un constructor sin el id, para cuando agregamos un turno
     public Paciente(String apellido, String nombre, String dni, LocalDate fechaIngreso, Domicilio domicilio) {
         this.apellido = apellido;
         this.nombre = nombre;
@@ -20,7 +22,7 @@ public class Paciente {
         this.fechaIngreso = fechaIngreso;
         this.domicilio = domicilio;
     }
-
+//3.contructor completo para cuando necesitamos acceder o modificar un turno necesita el id
     public Paciente(Integer id, String apellido, String nombre, String dni, LocalDate fechaIngreso, Domicilio domicilio) {
         this.id = id;
         this.apellido = apellido;

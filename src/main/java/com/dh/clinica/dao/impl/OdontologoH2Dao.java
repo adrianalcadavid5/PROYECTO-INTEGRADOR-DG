@@ -21,7 +21,7 @@ public class OdontologoH2Dao implements IDao<Odontologo> {
 
     private static final String SELECT_ALL = "SELECT * FROM ODONTOLOGOS";
 
-    public static final String UPDATE = "UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=?, WHERE ID=?";
+    public static final String UPDATE = "UPDATE ODONTOLOGOS SET NUMERO_MATRICULA=?, NOMBRE=?, APELLIDO=? WHERE ID=?";
     public static final String DELETE = "DELETE FROM ODONTOLOGOS WHERE ID =? ";
 
     @Override

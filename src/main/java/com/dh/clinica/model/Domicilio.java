@@ -9,7 +9,6 @@ public class Domicilio {
 
     public Domicilio() {
     }
-
     /* se genera el constructor sin el id, ya que el motor de la base de datos se lo asigna,  el constructor
     con el id lo utilizamos cuando me retorna la informacion de la base de datos, se arma el objeto completo
      */
