@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/odontologo")
@@ -44,9 +45,9 @@ public class OdontologoController {
             Odontologo odontologoEncontrado = odontologoService.buscarPorId(odontologo.getId());
             if (odontologo !=null){
                 odontologoService.modificarOdontologo(odontologo);
-                return ResponseEntity.ok("El odontologo fue modificado");
+                return ResponseEntity.ok().body(Map.of("message","El odontologo fue modificado"));
             }else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El odontologo no fue modificado");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El odontólogo no fue modificado"));
             }
         }
 
@@ -55,9 +56,9 @@ public class OdontologoController {
             Odontologo odontologoEncontrado = odontologoService.buscarPorId(id);
             if (odontologoEncontrado != null){
                 odontologoService.eliminarOdontologo(id);
-                return ResponseEntity.ok("El odontologo fue eliminado");
+                return ResponseEntity.ok().body(Map.of("message", "El odontólogo fue eliminado"));
             }else{
-               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El odontologo a eliminar no fue encontrado");
+               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El odontólogo a eliminar no fue encontrado"));
             }
         }
     }
