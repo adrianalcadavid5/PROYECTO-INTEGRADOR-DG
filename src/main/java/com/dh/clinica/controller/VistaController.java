@@ -1,9 +1,9 @@
 package com.dh.clinica.controller;
 
-import com.dh.clinica.model.Odontologo;
-import com.dh.clinica.model.Paciente;
-import com.dh.clinica.service.OdontologoService;
-import com.dh.clinica.service.PacienteService;
+import com.dh.clinica.entity.Odontologo;
+import com.dh.clinica.entity.Paciente;
+import com.dh.clinica.service.impl.OdontologoService;
+import com.dh.clinica.service.impl.PacienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +32,7 @@ public class VistaController {
     //Esto es un endpoint
     @GetMapping("/paciente1")
     public String mostrarPacientePorId(Model model, @RequestParam Integer id){
-        Paciente paciente = pacienteService.buscarPorId(id);
+        Paciente paciente = pacienteService.buscarPorId(id).get();
         model.addAttribute("nombre", paciente.getNombre());
         model.addAttribute("apellido", paciente.getApellido());
         //retornamos el nombre de la vista que esta en la carpeta templates -  paciente.html
@@ -41,7 +41,7 @@ public class VistaController {
     //creamos este otro endpoint para  utilizar el otro metodo @PathVariable, tengo que decirle como se pasa el parametro
     @GetMapping("/paciente/{id}")
     public String mostrarPacientePorId2(Model model, @PathVariable Integer id){
-        Paciente paciente = pacienteService.buscarPorId(id);
+        Paciente paciente = pacienteService.buscarPorId(id).get();
         model.addAttribute("nombre", paciente.getNombre());
         model.addAttribute("apellido", paciente.getApellido());
         //retornamos el nombre de la vista que esta en la carpeta templates -  paciente.html
@@ -49,7 +49,7 @@ public class VistaController {
     }
     @GetMapping("/odontologo/{id}")
     public String mostrarOdontologoPorId(Model model, @PathVariable Integer id){
-        Odontologo odontologo = odontologoService.buscarPorId(id);
+        Odontologo odontologo = odontologoService.buscarPorId(id).get();
         model.addAttribute("nombre", odontologo.getNombre());
         model.addAttribute("apellido", odontologo.getApellido());
         return "odontologo";
