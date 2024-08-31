@@ -1,6 +1,5 @@
 package com.dh.clinica.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,11 +23,14 @@ public class Paciente {
     private String nombre;
     private String dni;
     private LocalDate fechaIngreso;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL) //alll por que si elimino a un paciente que se elimine el dommicilio tambien. ya no lo necesitaria
+    @JoinColumn(name = "id_domicilio") //le indico como quiero que se llame la clave foránea
     private Domicilio domicilio;
-    @OneToMany(mappedBy = "paciente")
-   // @JsonManagedReference(value = "paciente-turno")
-    @JsonIgnore
+
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.REMOVE)//si necesito eliminar el turno, no se elimine el paciente.
+    @JsonManagedReference(value = "paciente-turno")
+    //@JsonIgnore
     public Set<Turno> turnoSet;
 
 

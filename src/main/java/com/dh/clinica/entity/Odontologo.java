@@ -25,8 +25,8 @@ public class Odontologo {
     private String apellido;
 
     @OneToMany(mappedBy = "odontologo")
-    //@JsonManagedReference(value = "odontologo-turno")
-    @JsonIgnore
+    @JsonManagedReference(value = "odontologo-turno")
+    //@JsonIgnore
     public Set<Turno> turnoSet;
 
 

@@ -26,14 +26,15 @@ public class PacienteController {
     NOTA: Las clases del moldelo deben de tener un consturctor vacio*/
     //creamos un endpoint
     @PostMapping("/guardar")
-    public ResponseEntity<Paciente> guardarPaciente(@RequestBody Paciente paciente){
+    public ResponseEntity<Paciente> guardarPaciente(@RequestBody Paciente paciente) {
         return ResponseEntity.ok(pacienteService.guardarPaciente(paciente));
     }
-//el ResponseEntity me debe de devolver un paciente o un mensaje, cuando no estamos seguro que me va a devolver utilizo ?
+
+    //el ResponseEntity me debe de devolver un paciente o un mensaje, cuando no estamos seguro que me va a devolver utilizo ?
     @GetMapping("/buscar/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
         Optional<Paciente> paciente = pacienteService.buscarPorId(id);
-        if(paciente.isPresent()){
+        if (paciente.isPresent()) {
             return ResponseEntity.ok(paciente.get());
         } else {
             // ResponseEntity.status(HttpStatus.NOT_FOUND).body("paciente no encontrado");
@@ -43,15 +44,15 @@ public class PacienteController {
     }
 
     @GetMapping("/buscartodos")
-    public ResponseEntity<List<Paciente>> buscarTodos(){
+    public ResponseEntity<List<Paciente>> buscarTodos() {
         return ResponseEntity.ok(pacienteService.buscarTodos());
     }
 
     @PutMapping("/modificar")
-    public ResponseEntity<?> modificarPaciente(@RequestBody Paciente paciente){
+    public ResponseEntity<?> modificarPaciente(@RequestBody Paciente paciente) {
         Optional<Paciente> pacienteEncontrado = pacienteService.buscarPorId(paciente.getId());
-        if(pacienteEncontrado.isPresent()){
-            pacienteService.modificarPaciente(paciente);
+        if (pacienteEncontrado.isPresent()) {
+            pacienteService.modificarPaciente(pacienteEncontrado.get());
             String jsonResponse = "{\"mensaje\": \"El paciente fue modificado\"}";
             return ResponseEntity.ok(jsonResponse);
         } else {
@@ -60,14 +61,26 @@ public class PacienteController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<?> eliminarPaciente(@PathVariable Integer id){
+    public ResponseEntity<?> eliminarPaciente(@PathVariable Integer id) {
         Optional<Paciente> pacienteEncontrado = pacienteService.buscarPorId(id);
-        if(pacienteEncontrado.isPresent()){
+        if (pacienteEncontrado.isPresent()) {
             pacienteService.eliminarPaciente(id);
             String jsonResponse = "{\"mensaje\": \"El paciente fue eliminado\"}";
             return ResponseEntity.ok(jsonResponse);
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/buscarApellidoNombre")
+    public ResponseEntity<List<Paciente>> buscarApellidoYNombre(@RequestParam String apellido, @RequestParam String nombre) {
+
+        return ResponseEntity.ok(pacienteService.buscarPorApellidoyNombre(apellido, nombre));
+    }
+
+    @GetMapping("/buscarNombre/{nombre}")
+    public ResponseEntity<List<Paciente>> buscarNombreLike(@PathVariable String nombre) {
+
+        return ResponseEntity.ok(pacienteService.buscarLikeNombre(nombre));
     }
 }

@@ -1,0 +1,18 @@
+package com.dh.clinica.dto.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class TurnoRequestDto {
+    private Integer paciente_id;
+    private Integer odontologo_id;
+    private String fecha;
+}
+
+//esta no es una entidad, no necesita mas anotaciones, será una clase plana

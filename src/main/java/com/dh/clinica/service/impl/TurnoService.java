@@ -1,11 +1,21 @@
 package com.dh.clinica.service.impl;
 
+import com.dh.clinica.dto.request.TurnoModificarDto;
+import com.dh.clinica.dto.request.TurnoRequestDto;
+import com.dh.clinica.dto.response.OdontologoResponseDto;
+import com.dh.clinica.dto.response.PacienteResponseDto;
+import com.dh.clinica.dto.response.TurnoResponseDto;
 import com.dh.clinica.entity.Odontologo;
 import com.dh.clinica.entity.Paciente;
 import com.dh.clinica.entity.Turno;
 import com.dh.clinica.repository.ITurnoRepository;
 import com.dh.clinica.service.ITurnoService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +25,8 @@ public class TurnoService implements ITurnoService {
     private ITurnoRepository turnoRepository;
     private PacienteService pacienteService;
     private OdontologoService odontologService;
+    @Autowired   //otra forma de hacer inyeccion de depencias diferente de agregarlo al constructor
+    private ModelMapper modelMapper;
 
     public TurnoService(ITurnoRepository turnoRepository, PacienteService pacienteService, OdontologoService odontologService) {
         this.turnoRepository = turnoRepository;
@@ -23,36 +35,59 @@ public class TurnoService implements ITurnoService {
     }
 
     @Override
-    public Turno guardarTurno(Turno turno){
-        Optional<Paciente> paciente = pacienteService.buscarPorId(turno.getPaciente().getId());
-        Optional<Odontologo> odontologo = odontologService.buscarPorId(turno.getOdontologo().getId());
-        Turno turnoARetornar = null;
-        if (paciente.isEmpty() && odontologo.isPresent()) {
-            turno.setPaciente(paciente.get());  //cuando utilizo un Opcional, debo de utilizar el .get() para obtenerlo
+    public TurnoResponseDto guardarTurno(TurnoRequestDto turnoRequestDto){
+        Optional<Paciente> paciente = pacienteService.buscarPorId(turnoRequestDto.getPaciente_id());
+        Optional<Odontologo> odontologo = odontologService.buscarPorId(turnoRequestDto.getOdontologo_id());
+        Turno turno = new Turno();
+        Turno turnoDesdeDb = null;
+        TurnoResponseDto turnoARetornar = null;
+
+        if (paciente.isPresent() && odontologo.isPresent()) {
+            //mapear el turnoRequestDto a turno
+            turno.setPaciente(paciente.get());
             turno.setOdontologo(odontologo.get());
+            turno.setFecha(LocalDate.parse(turnoRequestDto.getFecha()));
             //voy a persistir el turno.
-            turnoARetornar = turnoRepository.save(turno);
+            turnoDesdeDb = turnoRepository.save(turno);
+
+            //mapear el turnoDesdeDb a turnoResponseDto, hecho a mano
+            //turnoARetornar = convertirTurnoaResponse(turnoDesdeDb);
+
+            //turno mapeado con modelmapper
+            turnoARetornar = mapearATurnoResponse(turnoDesdeDb);
         }
         return turnoARetornar;
     }
 
     @Override
-    public Optional<Turno> buscarPorId(Integer id) {
-        return turnoRepository.findById(id);
+    public Optional<TurnoResponseDto> buscarPorId(Integer id) {
+        Optional<Turno> turnoDesdeDb = turnoRepository.findById(id);
+        TurnoResponseDto turnoResponseDto = null;
+        if (turnoDesdeDb.isPresent()){
+            turnoResponseDto = mapearATurnoResponse(turnoDesdeDb.get());
+        }
+        return Optional.ofNullable(turnoResponseDto);
     }
 
     @Override
-    public List<Turno> buscarTodos() {
-        return turnoRepository.findAll();
+    public List<TurnoResponseDto> buscarTodos() {
+        List<Turno> turnos = turnoRepository.findAll();
+        List<TurnoResponseDto> turnoRespuesta = new ArrayList<>();
+        for (Turno t: turnos){
+            TurnoResponseDto turnoAuxiliar = mapearATurnoResponse(t);
+            turnoRespuesta.add((turnoAuxiliar));
+        }
+        return turnoRespuesta;
     }
 
     @Override
-    public void modificarTurno(Turno turno) {
-        Optional<Paciente> paciente = pacienteService.buscarPorId(turno.getPaciente().getId());
-        Optional<Odontologo> odontologo = odontologService.buscarPorId(turno.getOdontologo().getId());
+    public void modificarTurno(TurnoModificarDto turnoModificarDto) {
+        Optional<Paciente> paciente = pacienteService.buscarPorId(turnoModificarDto.getPaciente_id());
+        Optional<Odontologo> odontologo = odontologService.buscarPorId(turnoModificarDto.getOdontologo_id());
+        Turno turno = null;
         if (paciente.isEmpty() && odontologo.isPresent()) {
-            turno.setPaciente(paciente.get());
-            turno.setOdontologo(odontologo.get());
+            turno = new Turno(turnoModificarDto.getId(), paciente.get(), odontologo.get(),
+                    LocalDate.parse(turnoModificarDto.getFecha()));
             turnoRepository.save(turno);
         }
     }
@@ -61,6 +96,32 @@ public class TurnoService implements ITurnoService {
     public void eliminarTurno(Integer id) {
         turnoRepository.deleteById(id);
     }
+
+    @Override
+    public List<Turno> buscarTurnoPaciente(String apellidoPaciente) {
+        return turnoRepository.buscarTurnoPorApellidoPaciente(apellidoPaciente);
+    }
+
+    private TurnoResponseDto convertirTurnoAResponse(Turno turnoDesdeDb){
+        OdontologoResponseDto odontologoResponseDto = new OdontologoResponseDto(
+                turnoDesdeDb.getOdontologo().getId(), turnoDesdeDb.getOdontologo().getNumeroMatricula(),
+                turnoDesdeDb.getOdontologo().getNombre(), turnoDesdeDb.getOdontologo().getApellido()
+        );
+        PacienteResponseDto pacienteResponseDto = new PacienteResponseDto(turnoDesdeDb.getPaciente().getId(),
+                turnoDesdeDb.getPaciente().getNombre(), turnoDesdeDb.getPaciente().getApellido(), turnoDesdeDb.getPaciente().getDni());
+
+        TurnoResponseDto turnoARetornar = new TurnoResponseDto(turnoDesdeDb.getId(),
+                pacienteResponseDto, odontologoResponseDto, turnoDesdeDb.getFecha().toString());
+        return turnoARetornar;
+    }
+
+    private TurnoResponseDto mapearATurnoResponse(Turno turno){
+        TurnoResponseDto turnoResponseDto = modelMapper.map(turno, TurnoResponseDto.class);
+        turnoResponseDto.setOdontologoResponseDto(modelMapper.map(turno.getOdontologo(), OdontologoResponseDto.class));
+        turnoResponseDto.setPacienteResponseDto(modelMapper.map(turno.getPaciente(), PacienteResponseDto.class));
+        return turnoResponseDto;
+    }
+
 
 
 }

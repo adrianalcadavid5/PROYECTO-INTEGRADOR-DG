@@ -1,4 +1,5 @@
 package com.dh.clinica.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,10 +20,10 @@ public class Turno {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // para generar el id auto incremental
     private Integer id;
     @ManyToOne
-    //@JsonManagedReference(value = "paciente-turno")
+    @JsonBackReference(value = "paciente-turno")//En una relacion ManyToOne no se recomienda ningun tipo de cascade
     private Paciente paciente;
     @ManyToOne
-    //@JsonManagedReference(value = "odontologo-turno")  //para mostrar
+    @JsonBackReference(value = "odontologo-turno")  //para mostrar
     private Odontologo odontologo;
     private LocalDate fecha;
 
