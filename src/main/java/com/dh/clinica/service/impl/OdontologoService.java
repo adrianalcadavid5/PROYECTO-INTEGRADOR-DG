@@ -52,5 +52,15 @@ public class OdontologoService implements IOdontologoService {
         return iOdontologoRepository.buscarPorNombreOApellido(nombre,apellido);
     }
 
+    @Override
+    public List<Odontologo> buscarPorNombre(String nombre) {
+        return iOdontologoRepository.finfindByNombre(nombre);
+    }
+
+    @Override
+    public List<Odontologo> buscarPorApellido(String apellido) {
+        return iOdontologoRepository.finfindByApellido(apellido);
+    }
+
 
 }

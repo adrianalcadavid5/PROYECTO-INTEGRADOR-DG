@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,9 +71,15 @@ public class TurnoController {
     public ResponseEntity<List<Turno>> buscarTurnoApellidoPaciente(@PathVariable String apellido){
         return ResponseEntity.ok(turnoService.buscarTurnoPaciente(apellido));
     }
-    @GetMapping("buscartodos/{fecha}")
-    public ResponseEntity<List<Turno>> buscarTurnoFecha(@PathVariable LocalDate fecha){
-        return ResponseEntity.ok(turnoService.buscarTurnosPorFecha(fecha));
+    @GetMapping("/buscartodos/{fecha}")
+    public ResponseEntity<List<Turno>> buscarTurnoFecha(@PathVariable("fecha") String fechaStr) {
+        try {
+            LocalDate fecha = LocalDate.parse(fechaStr);  // Parsear la fecha del string al tipo LocalDate
+            List<Turno> turnos = turnoService.buscarTurnosPorFecha(fecha);
+            return ResponseEntity.ok(turnos);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body(null);  // Retornar un error si la fecha no tiene el formato correcto
+        }
     }
     @GetMapping("ordenartodos")
     public ResponseEntity<List<Turno>> ordenarTurnosPorFecha(){

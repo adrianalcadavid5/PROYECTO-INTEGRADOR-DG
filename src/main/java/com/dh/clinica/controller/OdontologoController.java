@@ -69,8 +69,18 @@ public class OdontologoController {
             return ResponseEntity.ok(odontologoService.buscarPorApellidoyNombre(apellido,nombre));
     }
     @GetMapping("/buscarPorNombreOApellido")
-    public ResponseEntity<List<Odontologo>> buscarPorNombreOApellido(@RequestParam String nombre, @RequestParam String apellido){
-        return ResponseEntity.ok(odontologoService.buscarPorApellidoyNombre(nombre,apellido));
+    public ResponseEntity<List<Odontologo>> buscarPorNombreOApellido(@RequestParam(required = false) String nombre, @RequestParam(required = false) String apellido) {
+        List<Odontologo> odontologos;
+
+        if (nombre != null && !nombre.isEmpty()) {
+            odontologos = odontologoService.buscarPorNombre(nombre);
+        } else if (apellido != null && !apellido.isEmpty()) {
+            odontologos = odontologoService.buscarPorApellido(apellido);
+        } else {
+            return ResponseEntity.badRequest().build();  // Error si ambos parámetros están vacíos
+        }
+
+        return ResponseEntity.ok(odontologos);
     }
 }
 
