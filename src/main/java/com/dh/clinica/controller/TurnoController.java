@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,5 +70,12 @@ public class TurnoController {
     public ResponseEntity<List<Turno>> buscarTurnoApellidoPaciente(@PathVariable String apellido){
         return ResponseEntity.ok(turnoService.buscarTurnoPaciente(apellido));
     }
-
+    @GetMapping("buscartodos/{fecha}")
+    public ResponseEntity<List<Turno>> buscarTurnoFecha(@PathVariable LocalDate fecha){
+        return ResponseEntity.ok(turnoService.buscarTurnosPorFecha(fecha));
+    }
+    @GetMapping("ordenartodos")
+    public ResponseEntity<List<Turno>> ordenarTurnosPorFecha(){
+        return ResponseEntity.ok(turnoService.ordenarTurnosPorFecha());
+    }
 }

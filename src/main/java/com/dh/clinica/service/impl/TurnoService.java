@@ -102,6 +102,16 @@ public class TurnoService implements ITurnoService {
         return turnoRepository.buscarTurnoPorApellidoPaciente(apellidoPaciente);
     }
 
+    @Override
+    public List<Turno> buscarTurnosPorFecha(LocalDate fechaTurno) {
+        return turnoRepository.findByFecha(fechaTurno);
+    }
+
+    @Override
+    public List<Turno> ordenarTurnosPorFecha() {
+        return turnoRepository.findAllByOrderByFechaAsc();
+    }
+
     private TurnoResponseDto convertirTurnoAResponse(Turno turnoDesdeDb){
         OdontologoResponseDto odontologoResponseDto = new OdontologoResponseDto(
                 turnoDesdeDb.getOdontologo().getId(), turnoDesdeDb.getOdontologo().getNumeroMatricula(),
