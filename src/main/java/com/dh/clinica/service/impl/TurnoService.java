@@ -72,6 +72,9 @@ public class TurnoService implements ITurnoService {
         TurnoResponseDto turnoResponseDto = null;
         if (turnoDesdeDb.isPresent()){
             turnoResponseDto = mapearATurnoResponse(turnoDesdeDb.get());
+            logger.info("El turno con ID " + id + " fue encontrado" + turnoDesdeDb.get());
+        }else {
+            logger.warn("El turno con ID "+ id + " no fue encontrado.");
         }
         return Optional.ofNullable(turnoResponseDto);
     }
@@ -93,10 +96,14 @@ public class TurnoService implements ITurnoService {
         Optional<Paciente> paciente = pacienteService.buscarPorId(turnoModificarDto.getPaciente_id());
         Optional<Odontologo> odontologo = odontologService.buscarPorId(turnoModificarDto.getOdontologo_id());
         Turno turno = null;
-        if (paciente.isEmpty() && odontologo.isPresent()) {
+        if (paciente.isPresent() && odontologo.isPresent()) {
             turno = new Turno(turnoModificarDto.getId(), paciente.get(), odontologo.get(),
                     LocalDate.parse(turnoModificarDto.getFecha()));
             turnoRepository.save(turno);
+            logger.info("El turno con ID " + turno.getId() + " fue modificado");
+        }else {
+            logger.warn("No se pudo modificar el turno. El paciente con ID " + turnoModificarDto.getPaciente_id() +
+                    " o el odontólogo con ID " + turnoModificarDto.getOdontologo_id() + " no existen.");
         }
     }
 
@@ -105,23 +112,28 @@ public class TurnoService implements ITurnoService {
         Optional<Turno> turno = turnoRepository.findById(id);
         if (turno.isPresent()){
             turnoRepository.deleteById(id);
+            logger.info("El turno con el ID "+ id +" fue eliminado");
         }else {
+            logger.warn("No se pudo eliminar el turno con el ID " + id + " por que no fue encontrado");
             throw new ResourceNotFoundException("El turno "+ id + " no fue encontrado");
         }
     }
 
     @Override
     public List<Turno> buscarTurnoPaciente(String apellidoPaciente) {
+        logger.info("Buscando turnos para el paciente con apellido " + apellidoPaciente);
         return turnoRepository.buscarTurnoPorApellidoPaciente(apellidoPaciente);
     }
 
     @Override
     public List<Turno> buscarTurnosPorFecha(LocalDate fechaTurno) {
+        logger.info("Buscando turnos para la fecha : " + fechaTurno);
         return turnoRepository.findByFecha(fechaTurno);
     }
 
     @Override
     public List<Turno> ordenarTurnosPorFecha() {
+        logger.info("Ordenando turnos por fecha");
         return turnoRepository.findAllByOrderByFechaAsc();
     }
 
