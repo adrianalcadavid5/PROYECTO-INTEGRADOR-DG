@@ -15,8 +15,7 @@ public interface IOdontologoRepository extends JpaRepository<Odontologo, Integer
 
     @Query("SELECT o FROM Odontologo o WHERE o.nombre = ?1 OR o.apellido = ?2")
     List<Odontologo> buscarPorNombreOApellido(String nombre, String apellido);
-
-    List<Odontologo> finfindByNombre(String nombre);
-    List<Odontologo> finfindByApellido(String apellido);
+    List<Odontologo> findByNombre(String nombre);
+    List<Odontologo> findByApellido(String apellido);
 
 }

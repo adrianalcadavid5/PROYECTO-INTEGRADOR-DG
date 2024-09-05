@@ -5,6 +5,7 @@ import com.dh.clinica.dto.request.TurnoRequestDto;
 import com.dh.clinica.dto.response.TurnoResponseDto;
 import com.dh.clinica.entity.Paciente;
 import com.dh.clinica.entity.Turno;
+import com.dh.clinica.exception.BadRequestException;
 import com.dh.clinica.service.impl.TurnoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -26,15 +27,11 @@ public class TurnoController {
     }
 
     @PostMapping("/guardar")
-    public ResponseEntity<?> guardarTurno(@RequestBody TurnoRequestDto turnoRequestDto){
+    public ResponseEntity<?> guardarTurno(@RequestBody TurnoRequestDto turnoRequestDto) {
         TurnoResponseDto turnoAGuardar = turnoService.guardarTurno(turnoRequestDto);
-        if(turnoAGuardar != null){
-            return ResponseEntity.ok(turnoAGuardar);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El paciente o el odontologo no fueron encontrados");
-        }
-
+        return ResponseEntity.ok(turnoAGuardar);
     }
+
     @GetMapping("/buscartodos")
     public ResponseEntity<List<TurnoResponseDto>> buscarTodos(){
         return ResponseEntity.ok(turnoService.buscarTodos());
@@ -58,20 +55,14 @@ public class TurnoController {
 
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarTurno(@PathVariable Integer id){
-        Optional<TurnoResponseDto> turnoEncontrado = turnoService.buscarPorId(id);
-        if (turnoEncontrado.isPresent()){
             turnoService.eliminarTurno(id);
-            String jsonResponse = "{\"mensaje\": \"El turno fue eliminado\"}";
-            return ResponseEntity.ok(jsonResponse);
-        }else{
-            return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
-        }
+            return ResponseEntity.ok("{\"mensaje\": \"El turno fue eliminado\"}");
     }
-    @GetMapping("buscartodos/{apellido}")
+    @GetMapping("buscarporapellidopaciente/{apellido}")
     public ResponseEntity<List<Turno>> buscarTurnoApellidoPaciente(@PathVariable String apellido){
         return ResponseEntity.ok(turnoService.buscarTurnoPaciente(apellido));
     }
-    @GetMapping("/buscartodos/{fecha}")
+    @GetMapping("/bucarporfecha/{fecha}")
     public ResponseEntity<List<Turno>> buscarTurnoFecha(@PathVariable("fecha") String fechaStr) {
         try {
             LocalDate fecha = LocalDate.parse(fechaStr);  // Parsear la fecha del string al tipo LocalDate
