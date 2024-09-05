@@ -1,6 +1,8 @@
 package com.dh.clinica.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,8 +14,13 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalHandler.class);
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiError> manejarExcepcionesRecursoNoEncontrado(ResourceNotFoundException e, HttpServletRequest request){
+        logger.warn("Recurso no encontrado: " + e.getMessage() + " - URL: " + request.getRequestURI());
+
         ApiError apiError = new ApiError(
                 request.getRequestURI(),  //url de donde viene el error
                 e.getMessage(),   //mensaje de error
@@ -25,12 +32,17 @@ public class GlobalHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> manejarTodasLasExcepciones(Exception e){
+    public ResponseEntity<String> manejarTodasLasExcepciones(Exception e,HttpServletRequest request){
+        logger.error("Error inesperado en la URL: " + request.getRequestURI(), e);
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiError> handleBadRequestException(BadRequestException e, HttpServletRequest request){
+        logger.warn("Solicitud incorrecta: " + e.getMessage() + " - URL: " + request.getRequestURI());
+
+
         ApiError apiError = new ApiError(
                 request.getRequestURI(),
                 e.getMessage(),

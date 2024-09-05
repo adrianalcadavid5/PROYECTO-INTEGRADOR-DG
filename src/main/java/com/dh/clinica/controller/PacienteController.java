@@ -33,14 +33,9 @@ public class PacienteController {
     //el ResponseEntity me debe de devolver un paciente o un mensaje, cuando no estamos seguro que me va a devolver utilizo ?
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
-        Optional<Paciente> paciente = pacienteService.buscarPorId(id);
-        if (paciente.isPresent()) {
-            return ResponseEntity.ok(paciente.get());
-        } else {
-            // ResponseEntity.status(HttpStatus.NOT_FOUND).body("paciente no encontrado");
-            //ResponseEntity.notFound().build();
-            return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
-        }
+        Paciente pacienteEncontrado = pacienteService.buscarPorId(id).get();
+        return ResponseEntity.ok(pacienteEncontrado);
+
     }
 
     @GetMapping("/buscartodos")
@@ -50,14 +45,8 @@ public class PacienteController {
 
     @PutMapping("/modificar")
     public ResponseEntity<?> modificarPaciente(@RequestBody Paciente paciente) {
-        Optional<Paciente> pacienteEncontrado = pacienteService.buscarPorId(paciente.getId());
-        if (pacienteEncontrado.isPresent()) {
-            pacienteService.modificarPaciente(pacienteEncontrado.get());
-            String jsonResponse = "{\"mensaje\": \"El paciente fue modificado\"}";
-            return ResponseEntity.ok(jsonResponse);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+            pacienteService.modificarPaciente(paciente);
+            return ResponseEntity.ok("{\"mensaje\": \"El paciente fue modificado\"}");
     }
 
     @DeleteMapping("/eliminar/{id}")
