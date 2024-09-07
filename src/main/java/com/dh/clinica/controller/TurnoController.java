@@ -66,13 +66,13 @@ public class TurnoController {
     @GetMapping("/bucarporfecha/{fecha}")
     public ResponseEntity<List<Turno>> buscarTurnoFecha(@PathVariable("fecha") String fechaStr) {
         try {
-            LocalDate fecha = LocalDate.parse(fechaStr);  // Parsear la fecha del string al tipo LocalDate
-            List<Turno> turnos = turnoService.buscarTurnosPorFecha(fecha);
+            List<Turno> turnos = turnoService.buscarTurnosPorFecha(fechaStr);
             return ResponseEntity.ok(turnos);
         } catch (DateTimeParseException e) {
             return ResponseEntity.badRequest().body(null);  // Retornar un error si la fecha no tiene el formato correcto
         }
     }
+
     @GetMapping("ordenartodos")
     public ResponseEntity<List<Turno>> ordenarTurnosPorFecha(){
         return ResponseEntity.ok(turnoService.ordenarTurnosPorFecha());

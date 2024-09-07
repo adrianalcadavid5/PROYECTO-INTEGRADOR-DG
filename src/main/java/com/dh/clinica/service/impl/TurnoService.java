@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -126,9 +127,11 @@ public class TurnoService implements ITurnoService {
     }
 
     @Override
-    public List<Turno> buscarTurnosPorFecha(LocalDate fechaTurno) {
-        logger.info("Buscando turnos para la fecha : " + fechaTurno);
-        return turnoRepository.findByFecha(fechaTurno);
+    public List<Turno> buscarTurnosPorFecha(String fechaStr) throws DateTimeParseException {
+        logger.info("Buscando turnos para la fecha : " + fechaStr);
+        //Parseamos la fecha
+        LocalDate fecha = LocalDate.parse(fechaStr);
+        return turnoRepository.findByFecha(fecha);
     }
 
     @Override

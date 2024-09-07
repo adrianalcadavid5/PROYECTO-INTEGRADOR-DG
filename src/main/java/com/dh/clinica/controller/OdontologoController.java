@@ -28,13 +28,8 @@ public class OdontologoController {
 
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
-        Optional<Odontologo> odontologo = odontologoService.buscarPorId(id);
-            if (odontologo.isPresent()){
-                return ResponseEntity.ok(odontologo.get());
-            }else {
-                return ResponseEntity.status(HttpStatus.valueOf(404)).build();
-            }
-
+        Odontologo odontologoEncontrado = odontologoService.buscarPorId(id).get();
+        return ResponseEntity.ok(odontologoEncontrado);
         }
 
     @GetMapping("/buscartodos")
@@ -44,14 +39,8 @@ public class OdontologoController {
 
     @PutMapping("/modificar")
     public ResponseEntity<?> modificarPaciente(@Valid @RequestBody Odontologo odontologo){
-        Optional<Odontologo> odontologoEncontrado = odontologoService.buscarPorId(odontologo.getId());
-            if (odontologoEncontrado.isPresent()){
-                odontologoService.modificarOdontologo(odontologo);
-                String jsonResponse = "{\"mensaje\": \"El odontologo fue modificado\"}";
-                return ResponseEntity.ok(jsonResponse);
-            }else {
-                return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
-            }
+        odontologoService.modificarOdontologo(odontologo);
+        return ResponseEntity.ok("{\"mensaje\": \"El odontologo fue modificado\"}");
     }
 
     @DeleteMapping("/eliminar/{id}")
@@ -65,16 +54,7 @@ public class OdontologoController {
     }
     @GetMapping("/buscarPorNombreOApellido")
     public ResponseEntity<List<Odontologo>> buscarPorNombreOApellido(@RequestParam(required = false) String nombre, @RequestParam(required = false) String apellido) {
-        List<Odontologo> odontologos;
-
-        if (nombre != null && !nombre.isEmpty()) {
-            odontologos = odontologoService.buscarPorNombre(nombre);
-        } else if (apellido != null && !apellido.isEmpty()) {
-            odontologos = odontologoService.buscarPorApellido(apellido);
-        } else {
-            return ResponseEntity.badRequest().build();  // Error si ambos parámetros están vacíos
-        }
-
+        List<Odontologo> odontologos = odontologoService.buscarPorNombreOApelido(nombre, apellido);
         return ResponseEntity.ok(odontologos);
     }
 }

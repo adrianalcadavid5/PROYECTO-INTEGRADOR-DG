@@ -22,7 +22,7 @@ public interface ITurnoService {
 
     List<Turno> buscarTurnoPaciente (String apellidoPaciente);
 
-    List<Turno> buscarTurnosPorFecha (LocalDate fechaTurno);
+    List<Turno> buscarTurnosPorFecha (String fechaStr);
 
     List<Turno> ordenarTurnosPorFecha();
 }

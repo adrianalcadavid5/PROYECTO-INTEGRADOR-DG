@@ -38,7 +38,7 @@ public class PacienteService implements IPacienteService {
             return pacienteEncontrado;
         }else {
             logger.warn("El paciente con el ID "+ id + " no fue encontrado");
-            throw new ResourceNotFoundException("El paciente coon el ID "+ id + " no fue encontrado");
+            throw new ResourceNotFoundException("El paciente con el ID "+ id + " no fue encontrado");
         }
     }
 
@@ -66,7 +66,9 @@ public class PacienteService implements IPacienteService {
         Optional<Paciente> pacienteEncontrado = pacienteRepository.findById(id);
         if(pacienteEncontrado.isPresent()){
             pacienteRepository.deleteById(id);
+            logger.info("El paciente con el ID " + id + " fue eliminado");
         }else {
+            logger.error("El paciente con el ID " + id + " no fue encontrado para eliminación");
             throw  new ResourceNotFoundException("El paciente "+ id + " no fue encontrado");
         }
 
