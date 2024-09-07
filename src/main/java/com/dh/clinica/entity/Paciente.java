@@ -2,6 +2,10 @@ package com.dh.clinica.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +23,17 @@ public class Paciente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank(message = "El campo no puede estar en blanco")
     private String apellido;
+    @NotBlank(message = "El campo no puede estar en blanco")
     private String nombre;
+    @NotBlank(message = "El campo no puede estar en blanco")
+    @Size(min = 7, max = 15)
     private String dni;
+    @NotNull(message = "El campo no puede ser nulo")
     private LocalDate fechaIngreso;
 
+    @Valid //se anota aca cuando hay una relacion unidireccional, se le debe de informar que debe de validar el domicilio,
     @OneToOne(cascade = CascadeType.ALL) //alll por que si elimino a un paciente que se elimine el dommicilio tambien. ya no lo necesitaria
     @JoinColumn(name = "id_domicilio") //le indico como quiero que se llame la clave foránea
     private Domicilio domicilio;

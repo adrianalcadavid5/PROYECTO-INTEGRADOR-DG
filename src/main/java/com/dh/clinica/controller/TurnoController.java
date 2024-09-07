@@ -7,6 +7,7 @@ import com.dh.clinica.entity.Paciente;
 import com.dh.clinica.entity.Turno;
 import com.dh.clinica.exception.BadRequestException;
 import com.dh.clinica.service.impl.TurnoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class TurnoController {
     }
 
     @PostMapping("/guardar")
-    public ResponseEntity<?> guardarTurno(@RequestBody TurnoRequestDto turnoRequestDto) {
+    public ResponseEntity<?> guardarTurno(@Valid  @RequestBody TurnoRequestDto turnoRequestDto) {
         TurnoResponseDto turnoAGuardar = turnoService.guardarTurno(turnoRequestDto);
         return ResponseEntity.ok(turnoAGuardar);
     }
@@ -38,7 +39,7 @@ public class TurnoController {
     }
 
     @PutMapping("/modificar")
-    public ResponseEntity<?> modificarTurno(@RequestBody TurnoModificarDto turnoModificarDto){
+    public ResponseEntity<?> modificarTurno(@Valid @RequestBody TurnoModificarDto turnoModificarDto){
         turnoService.modificarTurno(turnoModificarDto);
         return ResponseEntity.ok("{\"mensaje\": \"El turno fue modificado\"}");
     }

@@ -17,8 +17,8 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-@Transactional
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY) //con esta utilizamos la base de datos en memoria
+@Transactional //sirve para limpiar la base de datos cuando hacemos test para que no se cargue nada de lo que probamos, como un rollback
 class PacienteServiceTest {
     @Autowired
     PacienteService pacienteService;
@@ -26,7 +26,7 @@ class PacienteServiceTest {
     Paciente paciente;
     Paciente pacienteDesdeDb;
 
-    @BeforeEach
+    @BeforeEach //quiere decir que se cargue antes de cada test
     void crearPaciente(){
         Domicilio domicilio = new Domicilio(null,"Falsa",456,"Cipolleti", "Rio Negro");
         paciente = new Paciente();

@@ -1,6 +1,8 @@
 package com.dh.clinica.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,9 @@ public class Domicilio {
     private Integer id;
     private String calle;
     private int numero;
+    @NotBlank(message = "El campo no puede estar en blanco")
     private String localidad;
+    @NotBlank(message = "El campo no puede estar en blanco")
     private String provincia;
 
     @Override

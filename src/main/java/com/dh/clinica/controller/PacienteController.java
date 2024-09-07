@@ -2,6 +2,7 @@ package com.dh.clinica.controller;
 
 import com.dh.clinica.entity.Paciente;
 import com.dh.clinica.service.impl.PacienteService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class PacienteController {
     NOTA: Las clases del moldelo deben de tener un consturctor vacio*/
     //creamos un endpoint
     @PostMapping("/guardar")
-    public ResponseEntity<Paciente> guardarPaciente(@RequestBody Paciente paciente) {
+    public ResponseEntity<Paciente> guardarPaciente(@Valid @RequestBody Paciente paciente) {
         return ResponseEntity.ok(pacienteService.guardarPaciente(paciente));
     }
 
@@ -44,7 +45,7 @@ public class PacienteController {
     }
 
     @PutMapping("/modificar")
-    public ResponseEntity<?> modificarPaciente(@RequestBody Paciente paciente) {
+    public ResponseEntity<?> modificarPaciente(@Valid @RequestBody Paciente paciente) {
             pacienteService.modificarPaciente(paciente);
             return ResponseEntity.ok("{\"mensaje\": \"El paciente fue modificado\"}");
     }

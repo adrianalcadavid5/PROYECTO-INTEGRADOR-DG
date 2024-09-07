@@ -2,6 +2,7 @@ package com.dh.clinica.controller;
 
 import com.dh.clinica.entity.Odontologo;
 import com.dh.clinica.service.impl.OdontologoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class OdontologoController {
     }
 
     @PostMapping("/guardar")
-    public ResponseEntity<Odontologo> guardarOdontologo(@RequestBody Odontologo odontologo){
+    public ResponseEntity<Odontologo> guardarOdontologo(@Valid @RequestBody Odontologo odontologo){
         return ResponseEntity.ok(odontologoService.guardarOdontologo(odontologo));
     }
 
@@ -42,7 +43,7 @@ public class OdontologoController {
     }
 
     @PutMapping("/modificar")
-    public ResponseEntity<?> modificarPaciente(@RequestBody Odontologo odontologo){
+    public ResponseEntity<?> modificarPaciente(@Valid @RequestBody Odontologo odontologo){
         Optional<Odontologo> odontologoEncontrado = odontologoService.buscarPorId(odontologo.getId());
             if (odontologoEncontrado.isPresent()){
                 odontologoService.modificarOdontologo(odontologo);
