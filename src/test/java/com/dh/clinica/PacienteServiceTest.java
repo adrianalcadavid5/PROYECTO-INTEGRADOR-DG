@@ -32,7 +32,7 @@ class PacienteServiceTest {
         paciente = new Paciente();
         paciente.setApellido("Romero");
         paciente.setNombre("Luciana");
-        paciente.setDni("566655");
+        paciente.setDni("56699655");
         paciente.setFechaIngreso(LocalDate.of(2024,7,16));
         paciente.setDomicilio(domicilio);
         pacienteDesdeDb = pacienteService.guardarPaciente(paciente);

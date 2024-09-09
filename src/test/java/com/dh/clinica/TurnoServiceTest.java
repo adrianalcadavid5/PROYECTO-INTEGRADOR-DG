@@ -41,7 +41,7 @@ public class TurnoServiceTest {
         paciente = new Paciente();
         paciente.setApellido("Gomez");
         paciente.setNombre("Juan");
-        paciente.setDni("98777");
+        paciente.setDni("98777888");
         paciente.setFechaIngreso(LocalDate.of(2024,7,16));
         paciente.setDomicilio(new Domicilio(null,"Cordoba",499,"Cipolleti", "Rio Negro"));
         paciente = pacienteService.guardarPaciente(paciente);
