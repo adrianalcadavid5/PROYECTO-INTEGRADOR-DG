@@ -73,7 +73,7 @@ public class TurnoService implements ITurnoService {
         TurnoResponseDto turnoResponseDto = null;
         if (turnoDesdeDb.isPresent()){
             turnoResponseDto = mapearATurnoResponse(turnoDesdeDb.get());
-            logger.info("El turno con ID " + id + " fue encontrado" + turnoDesdeDb.get());
+            logger.info("El turno con ID " + id + " fue encontrado correctamente" + turnoDesdeDb.get());
         }else {
             logger.warn("El turno con ID "+ id + " no fue encontrado.");
         }

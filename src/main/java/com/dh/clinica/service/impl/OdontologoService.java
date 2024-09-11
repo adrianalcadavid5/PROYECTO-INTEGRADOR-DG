@@ -29,7 +29,7 @@ public class OdontologoService implements IOdontologoService {
         validarOdontologo(odontologo);
         //si se valida y esta ok, se guarda el odontologo
         Odontologo odontologoGuardado = iOdontologoRepository.save(odontologo);
-        logger.info("El odontologo " + odontologoGuardado.getId() + " fue guardado");
+        logger.info("El odontologo " + odontologoGuardado.getId() + " fue guardado exitosamente");
         return odontologoGuardado;
     }
 
