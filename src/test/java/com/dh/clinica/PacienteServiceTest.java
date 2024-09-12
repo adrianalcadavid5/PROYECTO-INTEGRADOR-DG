@@ -38,7 +38,7 @@ class PacienteServiceTest {
         pacienteDesdeDb = pacienteService.guardarPaciente(paciente);
     }
     @Test
-    @DisplayName("Testear que un paciente se guarde en la base de datos con su domicilio")
+    @DisplayName("Testear que un paciente se guarde en la base de datos con su domicilio correctamente")
     void caso1(){
         //dato
         //cuando
@@ -47,7 +47,7 @@ class PacienteServiceTest {
     }
 
     @Test
-    @DisplayName("Testear que un paciente pueda ser obtenido cuando se envia el id")
+    @DisplayName("Testear que un paciente pueda ser obtenido cuando se envia el id con exito")
     void caso2(){
         //dado
         Integer id  = pacienteDesdeDb.getId();
